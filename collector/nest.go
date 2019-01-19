@@ -38,6 +38,8 @@ var (
 		[]string{"thermostat"}, nil)
 )
 
+// NewNestCollector creates a nestCollector given a nest client.
+// This function will fatal if no client is provided.
 func NewNestCollector(client *nest.Client) nestCollector {
 	if client == nil {
 		log.Fatal("client must be provided")

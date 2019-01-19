@@ -20,6 +20,8 @@ var versionInfoTmpl = `
   go version:  {{ .goVersion }}
 `
 
+// Print returns basic version information suitable for
+// display in a command line output.
 func Print() string {
 	m := map[string]string{
 		"program":   Program,
@@ -37,6 +39,7 @@ func Print() string {
 	return strings.TrimSpace(buf.String())
 }
 
+// Info returns shortened version information.
 func Info() string {
 	return fmt.Sprintf("(version=%s)", Version)
 }
