@@ -12,3 +12,9 @@ go:
 script:
   - make docker
   - docker images | grep scnewma/nest_exporter
+
+deploy:
+  provider: script
+  script: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin && make docker-publish
+  on:
+    branch: master
