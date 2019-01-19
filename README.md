@@ -7,6 +7,7 @@ Prometheus exporter for Nest thermostat devices.
 Prerequisites:
 
 * Go
+* [Nest developer API token](https://developers.nest.com/guides/api/how-to-auth) (use PIN-based authorization)
 
 Building:
 
