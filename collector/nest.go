@@ -1,7 +1,7 @@
 package collector
 
 import (
-	"github.com/jtsiros/nest"
+	"github.com/jtsiros/nest/device"
 	"github.com/prometheus/client_golang/prometheus"
 	log "github.com/sirupsen/logrus"
 )
@@ -38,9 +38,15 @@ var (
 		[]string{"thermostat"}, nil)
 )
 
+// NestClient is a client that can perform operations
+// to retrieve device data from Nest products.
+type NestClient interface {
+	Devices() (*device.Devices, error)
+}
+
 // NewNestCollector creates a nestCollector given a nest client.
 // This function will fatal if no client is provided.
-func NewNestCollector(client *nest.Client) nestCollector {
+func NewNestCollector(client NestClient) nestCollector {
 	if client == nil {
 		log.Fatal("client must be provided")
 	}
@@ -49,7 +55,7 @@ func NewNestCollector(client *nest.Client) nestCollector {
 }
 
 type nestCollector struct {
-	client *nest.Client
+	client NestClient
 }
 
 func (c nestCollector) Describe(ch chan<- *prometheus.Desc) {

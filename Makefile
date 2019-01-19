@@ -1,36 +1,33 @@
+APP_NAME := nest_exporter
+VERSION ?= $(shell git rev-parse --abbrev-ref HEAD) 
+DOCKER_REPO ?= scnewma
+DOCKER_TAG ?= $(VERSION) 
+
+.DEFAULT_GOAL := clean-build
+
+.PHONY: docker
+docker: clean-build
+	@docker build -t $(DOCKER_REPO)/$(APP_NAME):$(DOCKER_TAG) .
+
 PKGS := $(shell go list ./... | grep -v /vendor)
 
 .PHONY: test
-test: lint
+test: 
 	go test $(PKGS)
 
-BIN_DIR := $(shell go env GOPATH)/bin
-GOMETALINTER := $(BIN_DIR)/gometalinter
-
-$(GOMETALINTER):
-	go get -u github.com/alecthomas/gometalinter
-	gometalinter --install &> /dev/null
-
-.PHONY: lint
-lint: $(GOMETALINTER)
-	gometalinter --errors ./... --vendor
-
-BINARY := nest_exporter
-VERSION ?= vlatest
+BINARY := $(APP_NAME)
 BASE_PKG := github.com/scnewma/nest_exporter
 LD_FLAGS := -ldflags "-X $(BASE_PKG)/version.Version=$(VERSION)"
 
-PLATFORMS := linux darwin
-os = $(word 1, $@)
+$(BINARY):
+	mkdir -p bin
+	go build $(LD_FLAGS) -o $(BINARY)
 
-.PHONY: $(PLATFORMS)
-$(PLATFORMS):
-	mkdir -p release
-	GOOS=$(os) GOARCH=amd64 go build $(LD_FLAGS) -o release/$(BINARY)-$(VERSION)-$(os)-amd64
-
-.PHONY: release
-release: linux darwin
+build: $(BINARY)
 
 .PHONY: clean
 clean:
-	rm -rf release/
+	rm -f $(BINARY)
+
+.PHONY: clean-build
+clean-build: clean build
