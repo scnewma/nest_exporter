@@ -3,6 +3,7 @@ package collector
 import (
 	"github.com/jtsiros/nest"
 	"github.com/prometheus/client_golang/prometheus"
+	log "github.com/sirupsen/logrus"
 )
 
 var (
@@ -39,7 +40,7 @@ var (
 
 func NewNestCollector(client *nest.Client) nestCollector {
 	if client == nil {
-		panic("client must be provided")
+		log.Fatal("client must be provided")
 	}
 
 	return nestCollector{client}
@@ -56,6 +57,7 @@ func (c nestCollector) Describe(ch chan<- *prometheus.Desc) {
 func (c nestCollector) Collect(ch chan<- prometheus.Metric) {
 	devices, err := c.client.Devices()
 	if err != nil {
+		log.WithError(err).Warn("failed to get devices")
 		ch <- newUpMetric(false)
 	}
 

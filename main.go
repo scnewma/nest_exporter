@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"log"
 	"net/http"
 
 	"github.com/jtsiros/nest"
@@ -11,11 +10,9 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/scnewma/nest_exporter/collector"
+	"github.com/scnewma/nest_exporter/version"
+	log "github.com/sirupsen/logrus"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
-)
-
-const (
-	version = "1.0.0"
 )
 
 func main() {
@@ -28,16 +25,22 @@ func main() {
 			"web.telemetry-path",
 			"Path under which to expose metrics.",
 		).Default("/metrics").String()
+		logLevel = kingpin.Flag(
+			"log.level",
+			"Only log messages with the given severity or above. Valid levels: [debug, info, warn, error, fatal]",
+		).Default(log.InfoLevel.String()).String()
 		token = kingpin.Flag(
 			"nest.token",
 			"Nest authorization token that has access to developer API.",
 		).Required().String()
 	)
-	kingpin.Version(version)
+	kingpin.Version(version.Print())
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
 
-	log.Printf("Starting nest_exporter %s\n", version)
+	setLogLevel(*logLevel)
+
+	log.Infoln("Starting nest_exporter", version.Info())
 
 	reg := prometheus.NewPedanticRegistry()
 
@@ -60,7 +63,7 @@ func main() {
 			</html>`))
 	})
 
-	log.Println("Listening on", *listenAddress)
+	log.Infoln("Listening on", *listenAddress)
 	if err := http.ListenAndServe(*listenAddress, nil); err != nil {
 		log.Fatal(err)
 	}
@@ -84,4 +87,13 @@ func newNestClient(token string) *nest.Client {
 	}
 
 	return n
+}
+
+func setLogLevel(logLevel string) {
+	lvl, err := log.ParseLevel(logLevel)
+	if err != nil {
+		log.Fatal("Unable to parse log level. Valid levels: [debug, info, warn, error, fatal]")
+	}
+
+	log.SetLevel(lvl)
 }
