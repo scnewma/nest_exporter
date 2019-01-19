@@ -5,9 +5,20 @@ DOCKER_TAG ?= $(VERSION)
 
 .DEFAULT_GOAL := clean-build
 
+.PHONY: release
+release: docker docker-publish
+
 .PHONY: docker
-docker: clean-build
+docker: linux
 	@docker build -t $(DOCKER_REPO)/$(APP_NAME):$(DOCKER_TAG) .
+
+.PHONY: docker-run
+docker-run:
+	@docker run -p 9264:9264 $(DOCKER_REPO)/$(APP_NAME):$(DOCKER_TAG) --nest.token=$(shell cat .token)
+
+.PHONY: docker-publish
+docker-publish:
+	@docker push $(DOCKER_REPO)/$(APP_NAME):$(DOCKER_TAG)
 
 PKGS := $(shell go list ./... | grep -v /vendor)
 
@@ -24,6 +35,10 @@ $(BINARY):
 	go build $(LD_FLAGS) -o $(BINARY)
 
 build: $(BINARY)
+
+linux: clean
+	mkdir -p release
+	GOOS=linux GOARCH=amd64 go build $(LD_FLAGS) -o $(BINARY)
 
 .PHONY: clean
 clean:
