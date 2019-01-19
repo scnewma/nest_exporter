@@ -36,4 +36,4 @@ docker run -p 9264:9264 -d scnewma/nest_exporter --nest.token=[TOKEN]
 
 ## Credit
 
-The idea for how to structure/build the project and accept flags for running the exporter came from reviewing [nest_exporter](https://github.com/prometheus/node_exporter).
+The idea for how to structure/build the project and accept flags for running the exporter came from reviewing [node_exporter](https://github.com/prometheus/node_exporter).
