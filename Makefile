@@ -6,7 +6,7 @@ DOCKER_TAG ?= $(VERSION)
 .DEFAULT_GOAL := clean-build
 
 .PHONY: release
-release: docker docker-publish
+release: test docker docker-publish
 
 .PHONY: docker
 docker: linux
