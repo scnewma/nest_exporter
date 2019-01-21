@@ -1,5 +1,8 @@
 # Nest Exporter
 
+[![Build Status](https://travis-ci.com/scnewma/nest_exporter.svg?branch=master)](https://travis-ci.com/scnewma/nest_exporter)
+[![Go Report Card](https://goreportcard.com/badge/github.com/scnewma/nest_exporter)](https://goreportcard.com/report/github.com/scnewma/nest_exporter)
+
 Prometheus exporter for Nest thermostat devices.
 
 ## Building and Running
