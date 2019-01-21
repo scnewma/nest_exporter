@@ -63,7 +63,7 @@ func mockClient() mockNestClient {
 		DevicesFn: func() (*device.Devices, error) {
 			return &device.Devices{
 				Thermostats: map[string]*device.Thermostat{
-					"x": &device.Thermostat{
+					"x": {
 						Name:                "Thermy",
 						Humidity:            50,
 						TargetTemperatureC:  20.2,
