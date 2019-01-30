@@ -67,6 +67,7 @@ func (c nestCollector) Collect(ch chan<- prometheus.Metric) {
 	if err != nil {
 		log.WithError(err).Warn("failed to get devices")
 		ch <- newUpMetric(false)
+		return
 	}
 
 	ch <- newUpMetric(true)
