@@ -10,7 +10,7 @@ go:
   - "1.11.x"
 
 script:
-  - make docker
+  - make docker VERSION=$TRAVIS_BRANCH
   - docker images | grep scnewma/nest_exporter
 
 deploy:
