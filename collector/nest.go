@@ -36,6 +36,14 @@ var (
 		"nest_current_humidity",
 		"Current humidity monitored by Nest thermostat.",
 		[]string{"thermostat"}, nil)
+	isHeatingDesc = prometheus.NewDesc(
+		"nest_is_heating",
+		"Whether heating is active or not.",
+		[]string{"thermostat"}, nil)
+	isCoolingDesc = prometheus.NewDesc(
+		"nest_is_cooling",
+		"Whether cooling is active or not.",
+		[]string{"thermostat"}, nil)
 )
 
 // NestClient is a client that can perform operations
@@ -78,6 +86,8 @@ func (c nestCollector) Collect(ch chan<- prometheus.Metric) {
 		ch <- newTargetTempFMetric(t.Name, t.TargetTemperatureF)
 		ch <- newTargetTempCMetric(t.Name, t.TargetTemperatureC)
 		ch <- newCurrentHumidityMetric(t.Name, t.Humidity)
+		ch <- newStateMetric(t.Name, "heating", isHeatingDesc, t.HvacState)
+		ch <- newStateMetric(t.Name, "cooling", isCoolingDesc, t.HvacState)
 	}
 }
 
@@ -136,6 +146,19 @@ func newCurrentHumidityMetric(thermostatName string, humidity int) prometheus.Me
 		currentHumidityDesc,
 		prometheus.GaugeValue,
 		float64(humidity),
+		thermostatName,
+	)
+}
+
+func newStateMetric(thermostatName string, queryState string, description *prometheus.Desc, currentState string) prometheus.Metric {
+	var activeValue float64
+	if currentState == queryState {
+		activeValue = 1
+	}
+	return prometheus.MustNewConstMetric(
+		description,
+		prometheus.GaugeValue,
+		activeValue,
 		thermostatName,
 	)
 }
