@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"context"
 	"net/http"
 
@@ -17,30 +18,34 @@ import (
 
 func main() {
 	var (
-		listenAddress = kingpin.Flag(
+		app           = kingpin.New(
+			"nest_exporter",
+			"A prometheus exporter for Nest.",
+		)
+		listenAddress = app.Flag(
 			"web.listen-address",
 			"Address on which to expose metrics and web interface.",
-		).Default(":9264").String()
-		metricsPath = kingpin.Flag(
+		).Default(":9264").Envar("LISTEN_ADDRESS").String()
+		metricsPath = app.Flag(
 			"web.telemetry-path",
 			"Path under which to expose metrics.",
-		).Default("/metrics").String()
-		logLevel = kingpin.Flag(
+		).Default("/metrics").Envar("METRICS_PATH").String()
+		logLevel = app.Flag(
 			"log.level",
 			"Only log messages with the given severity or above. Valid levels: [debug, info, warn, error, fatal]",
-		).Default(log.InfoLevel.String()).String()
-		token = kingpin.Flag(
+		).Default(log.InfoLevel.String()).Envar("LOG_LEVEL").String()
+		token = app.Flag(
 			"nest.token",
 			"Nest authorization token that has access to developer API.",
-		).Required().String()
+		).Required().Envar("NEST_TOKEN").String()
 	)
 	kingpin.Version(version.Print())
 	kingpin.HelpFlag.Short('h')
-	kingpin.Parse()
+	kingpin.MustParse(app.Parse(os.Args[1:]))
 
 	setLogLevel(*logLevel)
 
-	log.Infoln("Starting nest_exporter", version.Info())
+	log.Infof("Starting %s %s", app.Name, version.Info())
 
 	reg := prometheus.NewPedanticRegistry()
 

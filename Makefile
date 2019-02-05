@@ -1,7 +1,7 @@
 APP_NAME := nest_exporter
-VERSION ?= $(shell git rev-parse --abbrev-ref HEAD) 
+VERSION ?= $(shell git rev-parse --abbrev-ref HEAD)
 DOCKER_REPO ?= scnewma
-DOCKER_TAG ?= $(VERSION) 
+DOCKER_TAG ?= $(VERSION)
 
 .DEFAULT_GOAL := clean-build
 
@@ -9,8 +9,11 @@ DOCKER_TAG ?= $(VERSION)
 release: test docker docker-publish
 
 .PHONY: docker
-docker: linux
-	@docker build -t $(DOCKER_REPO)/$(APP_NAME):$(DOCKER_TAG) .
+docker:
+	@docker build --build-arg VCS_REF=`git rev-parse --short HEAD` \
+  		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
+		--build-arg VERSION=$(VERSION) \
+  		-t $(DOCKER_REPO)/$(APP_NAME):$(DOCKER_TAG) .
 
 .PHONY: docker-run
 docker-run:
@@ -23,7 +26,7 @@ docker-publish:
 PKGS := $(shell go list ./... | grep -v /vendor)
 
 .PHONY: test
-test: 
+test:
 	go test $(PKGS)
 
 BINARY := $(APP_NAME)
@@ -35,10 +38,6 @@ $(BINARY):
 	go build $(LD_FLAGS) -o $(BINARY)
 
 build: $(BINARY)
-
-linux: clean
-	mkdir -p release
-	GOOS=linux GOARCH=amd64 go build $(LD_FLAGS) -o $(BINARY)
 
 .PHONY: clean
 clean:

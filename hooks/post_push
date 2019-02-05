@@ -1,0 +1,7 @@
+#!/bin/bash
+COMMIT_HASH=`git rev-parse HEAD`
+VERSION=`git rev-parse --abbrev-ref HEAD`
+docker tag $IMAGE_NAME $DOCKER_REPO:$COMMIT_HASH
+docker tag $IMAGE_NAME $DOCKER_REPO:$VERSION
+docker push $DOCKER_REPO:$COMMIT_HASH
+docker push $DOCKER_REPO:$VERSION
