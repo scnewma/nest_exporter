@@ -10,12 +10,4 @@ go:
   - "1.11.x"
 
 script:
-  - make docker VERSION=$TRAVIS_BRANCH
-  - docker images | grep scnewma/nest_exporter
-
-deploy:
-  provider: script
-  script: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin && make docker-publish VERSION=$TRAVIS_BRANCH
-  on:
-    all_branches: true
-    condition: $TRAVIS_BRANCH =~ ^master|v[0-9]+\.[0-9]+\.[0-9]+$
+  - make test
