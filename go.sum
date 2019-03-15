@@ -9,6 +9,10 @@ github.com/golang/protobuf v1.2.0 h1:P3YflyNX/ehuJFLhxviNdFxQPkGK5cDcApsge1SqnvM
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/jtsiros/nest v0.9.0 h1:4NwCdd8A6ILgifu9qGJJbeZ72D9mbtFizh4kChf0m30=
 github.com/jtsiros/nest v0.9.0/go.mod h1:6EXBODQDHsE7CnTwBvJt5xXZ+Qus1asQ7qgYcsLQswI=
+github.com/jtsiros/nest v0.9.1 h1:3VcptSW3bMcsQO0bcJlEtkw5tWt6RrxrAb9HzstXIQU=
+github.com/jtsiros/nest v0.9.1/go.mod h1:6EXBODQDHsE7CnTwBvJt5xXZ+Qus1asQ7qgYcsLQswI=
+github.com/jtsiros/nest v0.9.4 h1:qF/zXJnKTswetQeSc10vSmgWJM+/oxhTsB7k4ijbNZ8=
+github.com/jtsiros/nest v0.9.4/go.mod h1:6EXBODQDHsE7CnTwBvJt5xXZ+Qus1asQ7qgYcsLQswI=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1 h1:mweAR1A6xJ3oS2pRaGiHgQ4OO8tzTaLawm8vnODuwDk=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/matttproud/golang_protobuf_extensions v1.0.1 h1:4hp9jkHxhMHkqkrB3Ix0jegS5sx/RkqARlsWZ6pIwiU=
