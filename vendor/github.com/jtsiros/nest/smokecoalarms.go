@@ -13,8 +13,7 @@ type SmokeCoAlarmService service
 
 // NewSmokeCoAlarmService creates a new service to interact with Smoke+CO alarms.
 func NewSmokeCoAlarmService(client *Client) *SmokeCoAlarmService {
-	rel := &url.URL{Path: "/devices/smoke_co_alarms"}
-	u := client.baseURL.ResolveReference(rel)
+	u := &url.URL{Path: "/devices/smoke_co_alarms"}
 
 	return &SmokeCoAlarmService{
 		client: client,
@@ -36,8 +35,8 @@ func (svc *SmokeCoAlarmService) Get(deviceid string) (*device.SmokeAlarm, error)
 // https://developers.nest.com/reference/api-smoke-co-alarm
 //
 func (svc *SmokeCoAlarmService) Stream(deviceID string) (*Stream, error) {
-	rel := &url.URL{Path: fmt.Sprintf("/devices/smoke_co_alarms/%s", deviceID)}
+	rel := &url.URL{Path: fmt.Sprintf("%s/%s", svc.apiURL.String(), deviceID)}
 	return NewStream(&config.Config{
-		APIURL: rel.String(),
+		APIURL: svc.client.baseURL.ResolveReference(rel).String(),
 	}, svc.client.httpClient)
 }
