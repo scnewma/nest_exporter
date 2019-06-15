@@ -27,7 +27,7 @@ func TestDescribe(t *testing.T) {
 
 	wg.Wait()
 
-	expectedCount := 6
+	expectedCount := 8
 	if len(results) != expectedCount {
 		t.Errorf("expected %d metrics, got %d\n", expectedCount, len(results))
 	}
@@ -52,7 +52,7 @@ func TestCollect(t *testing.T) {
 
 	wg.Wait()
 
-	expectedCount := 6
+	expectedCount := 8
 	if len(results) != expectedCount {
 		t.Errorf("expected %d metrics, got %d\n", expectedCount, len(results))
 	}
